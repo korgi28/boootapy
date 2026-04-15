@@ -176,4 +176,40 @@
         <h3 style="text-align:center">Партнерская программа</h3>
         <div class="option-item">
             <button class="copy-btn" onclick="copyLink()">COPY</button>
-            <span id="ref-link" style="font-size: 12px; color: var
+            <span id="ref-link" style="font-size: 12px; color: var(--text-button);">t.me/vpn_bot?start=12345678</span>
+        </div>
+        <p style="font-size: 12px; text-align: center; color: #666;">Нажмите на кнопку COPY, чтобы скопировать ссылку</p>
+
+        <div class="back-container">
+            <div class="btn full-width" onclick="showScreen('main-screen')">Назад в меню</div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // Данные пользователя
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('username').innerText = user.username || user.first_name;
+            document.getElementById('ref-link').innerText = `t.me/your_bot?start=${user.id}`;
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            // Вибрация при переключении (тактильный отклик)
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function copyLink() {
+            const linkText = document.getElementById('ref-link').innerText;
+            navigator.clipboard.writeText(linkText).then(() => {
+                tg.showAlert("Ссылка скопирована!");
+            });
+        }
+    </script>
+</body>
+</html>
