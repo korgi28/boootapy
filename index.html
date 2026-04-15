@@ -43,9 +43,9 @@
         .logo { font-weight: bold; font-size: 22px; letter-spacing: 1px; }
 
         .page-title-area { padding: 20px 20px 5px 20px; min-height: 60px; }
-        #dynamic-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.2; }
+        #dynamic-title { font-size: 26px; font-weight: bold; margin: 0; line-height: 1.2; }
 
-        /* Язык */
+        /* Выбор языка */
         .lang-container { position: relative; width: 95px; }
         .lang-current {
             background: var(--header-btn);
@@ -75,6 +75,11 @@
             border: 1px solid var(--neon-purple); box-shadow: var(--shadow); margin-bottom: 15px;
         }
 
+        .balance-box {
+            background: #251a3d; text-align: center; padding: 25px;
+            border-radius: 15px; border: 1px solid var(--neon-purple); margin-bottom: 15px;
+        }
+
         .info-row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 15px; }
         .info-value { color: var(--neon-purple); font-weight: bold; }
 
@@ -85,13 +90,16 @@
         }
         .action-btn:active { background: rgba(188, 19, 254, 0.2); }
 
-        /* Сообщение о техработах */
+        /* Окно оплаты */
+        .payment-details {
+            display: none; background: rgba(188, 19, 254, 0.05); padding: 20px;
+            border-radius: 15px; border: 1px solid var(--neon-purple); text-align: center;
+        }
+
+        /* Техработы */
         .maintenance-box {
-            background: rgba(188, 19, 254, 0.05);
-            border: 1px dashed var(--neon-purple);
-            padding: 30px 20px;
-            border-radius: 15px;
-            text-align: center;
+            background: rgba(188, 19, 254, 0.05); border: 1px dashed var(--neon-purple);
+            padding: 30px 20px; border-radius: 15px; text-align: center;
         }
 
         /* Navbar */
@@ -137,26 +145,50 @@
         </div>
 
         <div id="topup-screen" class="screen">
-            <div class="glass-card" style="text-align: center; background: #251a3d;">
+            <div class="balance-box">
                 <span style="font-size: 13px; opacity: 0.7;" data-i18n="balance_label">Текущий баланс</span>
                 <div style="font-size: 32px; font-weight: bold; margin: 10px 0;">0.00 ₽</div>
             </div>
-            <div class="action-btn" onclick="copyValue('https://pay-link.com', 'Ссылка на оплату')">📲 Пример копирования ссылки</div>
+
+            <div id="methods-list">
+                <div style="font-size: 16px; font-weight: bold; margin: 20px 0 15px 5px; color: #ccc;" data-i18n="pay_methods">Способы пополнения</div>
+                <div class="action-btn" onclick="showPayment('SBP')">📲 СБП</div>
+                <div class="action-btn" onclick="showPayment('Crypto')">🌐 Crypto (TON/USDT)</div>
+                <div class="action-btn" onclick="showPayment('Card')">💳 Карты РФ</div>
+            </div>
+
+            <div id="payment-window" class="payment-details">
+                <h3 id="pay-title" style="margin-top:0"></h3>
+                <p style="font-size: 14px; color: #ccc;" data-i18n="pay_instr">Нажмите на ссылку ниже, чтобы скопировать:</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 15px 0; word-break: break-all; color: var(--neon-purple); font-family: monospace; cursor: pointer;" id="pay-link" onclick="copyValue(this.innerText, 'Реквизиты')">
+                    ---
+                </div>
+                <div class="action-btn" onclick="backToMethods()" style="margin-bottom:0; font-size:12px; padding:12px;" data-i18n="btn_back_pay">⬅️ Назад</div>
+            </div>
         </div>
 
         <div id="ref-screen" class="screen">
             <div class="maintenance-box">
                 <div style="font-size: 40px; margin-bottom: 15px;">🛠️</div>
                 <h3 style="margin: 0 0 10px 0; color: var(--neon-purple);" data-i18n="maint_title">Технические работы</h3>
-                <p style="font-size: 14px; color: #ccc; margin: 0;" data-i18n="maint_desc">Данная функция пока что не доступна.</p>
+                <p style="font-size: 14px; color: #ccc; margin: 0;" data-i18n="maint_desc">Функция пока что не доступна.</p>
             </div>
         </div>
     </div>
 
     <div class="navbar">
-        <div class="nav-item active" id="nav-home" onclick="navTo('main-screen', 'nav-home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span data-i18n="nav_home">Главная</span></div>
-        <div class="nav-item" id="nav-wallet" onclick="navTo('topup-screen', 'nav-wallet')"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span data-i18n="nav_wallet">Баланс</span></div>
-        <div class="nav-item" id="nav-ref" onclick="navTo('ref-screen', 'nav-ref')"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span data-i18n="nav_ref">Друзья</span></div>
+        <div class="nav-item active" id="nav-home" onclick="navTo('main-screen', 'nav-home')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span data-i18n="nav_home">Главная</span>
+        </div>
+        <div class="nav-item" id="nav-wallet" onclick="navTo('topup-screen', 'nav-wallet')">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            <span data-i18n="nav_wallet">Баланс</span>
+        </div>
+        <div class="nav-item" id="nav-ref" onclick="navTo('ref-screen', 'nav-ref')">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span data-i18n="nav_ref">Друзья</span>
+        </div>
     </div>
 
     <script>
@@ -167,14 +199,16 @@
             ru: {
                 welcome: "Добро пожаловать,", profile: "Профиль:", status: "Статус:", no_sub: "Нет подписки",
                 sub_price: "Цена подписки:", balance_label: "Текущий баланс", nav_home: "Главная", nav_wallet: "Баланс",
-                nav_ref: "Друзья", maint_title: "Технические работы", maint_desc: "Функция пока что не доступна.",
-                copy_msg: "успешно скопировано!"
+                nav_ref: "Друзья", pay_methods: "Способы пополнения", pay_instr: "Нажмите на ссылку ниже, чтобы скопировать:",
+                btn_back_pay: "⬅️ Назад", maint_title: "Технические работы", maint_desc: "Функция пока что не доступна.",
+                copy_msg: "скопировано!"
             },
             en: {
                 welcome: "Welcome,", profile: "Profile:", status: "Status:", no_sub: "No sub",
-                sub_price: "Sub price:", balance_label: "Current balance", nav_home: "Home", nav_wallet: "Balance",
-                nav_ref: "Friends", maint_title: "Maintenance", maint_desc: "This feature is currently unavailable.",
-                copy_msg: "copied successfully!"
+                sub_price: "Price:", balance_label: "Current balance", nav_home: "Home", nav_wallet: "Balance",
+                nav_ref: "Friends", pay_methods: "Payments", pay_instr: "Click the link below to copy:",
+                btn_back_pay: "⬅️ Back", maint_title: "Maintenance", maint_desc: "This feature is currently unavailable.",
+                copy_msg: "copied!"
             }
         };
 
@@ -188,7 +222,6 @@
                 titleEl.style.fontSize = "26px";
             } else {
                 titleEl.style.fontSize = "22px";
-                titleEl.innerText = i18n[currentLang][document.getElementById(screenId.replace('-screen','')).id.replace('nav-','nav_')] || "";
                 if (screenId === 'topup-screen') titleEl.innerText = i18n[currentLang].nav_wallet;
                 if (screenId === 'ref-screen') titleEl.innerText = i18n[currentLang].nav_ref;
             }
@@ -199,8 +232,28 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             document.getElementById(navId).classList.add('active');
+            backToMethods();
             updateTitle(screenId);
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function showPayment(method) {
+            document.getElementById('methods-list').style.display = 'none';
+            const payWin = document.getElementById('payment-window');
+            const title = document.getElementById('pay-title');
+            const link = document.getElementById('pay-link');
+            payWin.style.display = 'block';
+            
+            if (method === 'SBP') { title.innerText = '📲 СБП'; link.innerText = 'https://qr.nspk.ru/gravi-pay-example'; }
+            if (method === 'Crypto') { title.innerText = '🌐 Crypto'; link.innerText = 'TQgraviVpnAddressExample12345'; }
+            if (method === 'Card') { title.innerText = '💳 Карты РФ'; link.innerText = '4444 5555 6666 7777'; }
+            
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        }
+
+        function backToMethods() {
+            document.getElementById('methods-list').style.display = 'block';
+            document.getElementById('payment-window').style.display = 'none';
         }
 
         function copyValue(val, label) {
@@ -230,6 +283,7 @@
             userName = user.first_name;
             document.getElementById('username').innerText = user.username || user.first_name;
         }
+        
         updateTitle('main-screen');
 
         window.onclick = function(event) {
