@@ -8,8 +8,8 @@
     <style>
         :root {
             --bg-color: #0f0a1a;
-            --header-bg: #1d1433; /* Заметно светлее фона */
-            --header-btn: #2b1f47; /* Еще светлее для кнопок */
+            --header-bg: #1d1433; 
+            --header-btn: #2b1f47; 
             --card-bg: #1a1429;
             --neon-purple: #bc13fe;
             --text-color: #ffffff;
@@ -34,14 +34,12 @@
             background: var(--header-bg);
             padding: 15px 20px;
             border-bottom: 1px solid rgba(188, 19, 254, 0.2);
-            position: relative;
         }
 
         .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
         }
 
         .logo {
@@ -49,58 +47,69 @@
             align-items: center;
             gap: 10px;
             font-weight: bold;
-            font-size: 22px;
+            font-size: 24px;
             letter-spacing: 1px;
         }
 
-        .welcome-text {
-            font-size: 13px;
-            color: #b0b0b0;
-            margin-top: 5px;
+        /* Жирное приветствие снизу плашки */
+        .welcome-section {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 15px;
+            color: var(--text-color);
         }
 
-        /* Выпадающее меню языка */
-        .lang-container { position: relative; }
+        /* Стилизованная кнопка языка */
+        .lang-container { 
+            position: relative; 
+            width: 90px; /* Фиксированная ширина для кнопки и меню */
+        }
 
         .lang-current {
             background: var(--header-btn);
-            border: 1px solid rgba(188, 19, 254, 0.4);
+            border: 1px solid rgba(188, 19, 254, 0.5);
             color: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 10px; /* Кнопка больше */
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 5px;
+            transition: 0.2s;
         }
 
         .lang-dropdown {
             display: none;
             position: absolute;
-            top: 110%;
-            right: 0;
+            top: 0; /* Накладывается сверху для эффекта единого меню */
+            left: 0;
+            width: 100%;
             background: var(--header-btn);
             border: 1px solid var(--neon-purple);
-            border-radius: 8px;
+            border-radius: 10px;
             z-index: 100;
-            min-width: 80px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
         }
 
-        .lang-dropdown div {
+        .lang-option {
             padding: 10px;
-            font-size: 12px;
+            font-size: 13px;
             text-align: center;
             cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: bold;
         }
 
-        .lang-dropdown div:last-child { border-bottom: none; }
-        .lang-dropdown div:hover { background: rgba(188, 19, 254, 0.2); }
+        .lang-option:not(:last-child) {
+            border-bottom: 1px solid rgba(188, 19, 254, 0.3); /* Тонкая черта */
+        }
 
-        /* Контентная область */
+        .lang-option:hover { background: rgba(188, 19, 254, 0.2); }
+
+        /* Контент */
         .container { padding: 20px; }
 
         .user-card {
@@ -112,7 +121,6 @@
             margin-bottom: 25px;
         }
 
-        /* Исправленное выравнивание двоеточий */
         .user-info p {
             margin: 12px 0;
             font-size: 14px;
@@ -120,16 +128,8 @@
             align-items: center;
         }
 
-        .info-label {
-            flex-shrink: 0; /* Чтобы текст не сжимался */
-            margin-right: 5px; /* Двоеточие прижато к тексту слева */
-        }
-
-        .info-value {
-            margin-left: auto; /* Значение уходит вправо */
-            color: var(--neon-purple);
-            font-weight: 600;
-        }
+        .info-label { flex-shrink: 0; margin-right: 5px; }
+        .info-value { margin-left: auto; color: var(--neon-purple); font-weight: 600; }
 
         .grid-container {
             display: grid;
@@ -162,7 +162,6 @@
 
         .screen { display: none; width: 100%; animation: fadeIn 0.2s ease; }
         .screen.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .option-item {
@@ -183,7 +182,6 @@
             padding: 6px;
             cursor: pointer;
         }
-
         .copy-icon-btn svg { fill: white; width: 18px; height: 18px; }
         h2 { text-align: center; font-size: 18px; margin-bottom: 20px; }
     </style>
@@ -194,16 +192,16 @@
         <div class="header-top">
             <div class="logo">🌌 Gravi</div>
             <div class="lang-container">
-                <div class="lang-current" onclick="toggleLangMenu()">
-                    <span id="active-lang-flag">🇷🇺</span> <span id="active-lang-name">RU</span>
+                <div class="lang-current" id="lang-btn" onclick="toggleLangMenu()">
+                    <span id="active-flag">🇷🇺</span> <span id="active-label">RU</span>
                 </div>
                 <div class="lang-dropdown" id="lang-dropdown">
-                    <div onclick="setLanguage('ru')">🇷🇺 RU</div>
-                    <div onclick="setLanguage('en')">🇺🇸 EN</div>
+                    <div class="lang-option" onclick="setLanguage('ru')">🇷🇺 RU</div>
+                    <div class="lang-option" onclick="setLanguage('en')">🇺🇸 EN</div>
                 </div>
             </div>
         </div>
-        <div class="welcome-text">
+        <div class="welcome-section">
             <span data-i18n="welcome">Добро пожаловать</span>, <span id="header-user">Гость</span>!
         </div>
     </div>
@@ -243,9 +241,9 @@
 
         <div id="topup-screen" class="screen">
             <h2 data-i18n="title_topup">💰 Пополнение</h2>
-            <div class="option-item">📲 СБП</div>
-            <div class="option-item">🌐 Crypto</div>
-            <div class="option-item">💳 Карты РФ</div>
+            <div class="option-item" data-i18n="pay_sbp">📲 СБП</div>
+            <div class="option-item" data-i18n="pay_crypto">🌐 Crypto</div>
+            <div class="option-item" data-i18n="pay_card">💳 Карты РФ</div>
             <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">
                 <span data-i18n="btn_back">⬅️ Назад</span>
             </div>
@@ -284,6 +282,9 @@
                 btn_back: "⬅️ Назад",
                 title_subs: "⚡ Выберите тариф",
                 title_topup: "💰 Пополнение",
+                pay_sbp: "📲 СБП",
+                pay_crypto: "🌐 Crypto",
+                pay_card: "💳 Карты РФ",
                 title_ref: "🤝 Партнерам",
                 ref_text: "Копируйте ссылку и приглашайте друзей!",
                 alert_copy: "✅ Ссылка скопирована!"
@@ -300,6 +301,9 @@
                 btn_back: "⬅️ Back",
                 title_subs: "⚡ Choose Plan",
                 title_topup: "💰 Top Up",
+                pay_sbp: "📲 SBP",
+                pay_crypto: "🌐 Crypto",
+                pay_card: "💳 INT Cards",
                 title_ref: "🤝 Partners",
                 ref_text: "Copy the link and invite friends!",
                 alert_copy: "✅ Link copied!"
@@ -315,8 +319,8 @@
 
         function setLanguage(lang) {
             currentLang = lang;
-            document.getElementById('active-lang-flag').innerText = lang === 'ru' ? '🇷🇺' : '🇺🇸';
-            document.getElementById('active-lang-name').innerText = lang.toUpperCase();
+            document.getElementById('active-flag').innerText = lang === 'ru' ? '🇷🇺' : '🇺🇸';
+            document.getElementById('active-label').innerText = lang.toUpperCase();
             
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
@@ -332,7 +336,7 @@
             const name = user.username ? `@${user.username}` : user.first_name;
             document.getElementById('username').innerText = name;
             document.getElementById('header-user').innerText = name;
-            document.getElementById('ref-link').innerText = `t.me/bot?start=${user.id}`;
+            document.getElementById('ref-link').innerText = `t.me/your_bot?start=${user.id}`;
         }
 
         function showScreen(screenId) {
@@ -352,9 +356,8 @@
             tg.showAlert(i18n[currentLang].alert_copy);
         }
 
-        // Закрытие меню при клике мимо
         window.onclick = function(event) {
-            if (!event.target.matches('.lang-current') && !event.target.closest('.lang-current')) {
+            if (!event.target.matches('#lang-btn') && !event.target.closest('#lang-btn')) {
                 document.getElementById('lang-dropdown').style.display = 'none';
             }
         }
