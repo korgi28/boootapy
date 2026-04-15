@@ -43,7 +43,7 @@
         .logo { font-weight: bold; font-size: 22px; letter-spacing: 1px; }
 
         .page-title-area { padding: 20px 20px 5px 20px; min-height: 60px; }
-        #dynamic-title { font-size: 22px; font-weight: bold; margin: 0; }
+        #dynamic-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.2; }
 
         /* Язык */
         .lang-container { position: relative; width: 95px; }
@@ -80,11 +80,7 @@
             border-radius: 15px; border: 1px solid var(--neon-purple); margin-bottom: 15px;
         }
 
-        .section-subtitle {
-            font-size: 16px; font-weight: bold; margin: 20px 0 15px 5px; color: #ccc;
-        }
-
-        .info-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 15px; }
+        .info-row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 15px; }
         .info-value { color: var(--neon-purple); font-weight: bold; }
 
         /* Кнопки */
@@ -95,22 +91,21 @@
         }
         .action-btn:active { background: rgba(188, 19, 254, 0.2); }
 
-        /* Окно оплаты (внутреннее) */
         .payment-details {
             display: none; background: rgba(188, 19, 254, 0.05); padding: 20px;
             border-radius: 15px; border: 1px solid var(--neon-purple); text-align: center;
         }
 
-        /* Navbar */
+        /* Navbar (теперь 3 кнопки) */
         .navbar {
             position: fixed; bottom: 20px; left: 15px; right: 15px;
             background: var(--card-bg); border: 2px solid var(--neon-purple);
             border-radius: 20px; display: flex; justify-content: space-around;
             padding: 12px 5px; box-shadow: var(--shadow); z-index: 1000;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #777; font-size: 9px; text-transform: uppercase; font-weight: bold; cursor: pointer; flex: 1; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #777; font-size: 10px; text-transform: uppercase; font-weight: bold; cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--neon-purple); }
-        .nav-item svg { width: 20px; height: 20px; margin-bottom: 4px; fill: currentColor; }
+        .nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; fill: currentColor; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -135,15 +130,19 @@
     <div class="content">
         <div id="main-screen" class="screen active">
             <div class="glass-card">
-                <div class="info-row"><span data-i18n="profile">Профиль:</span><span class="info-value" id="username">User</span></div>
-                <div class="info-row"><span data-i18n="status">Статус:</span><span class="info-value" data-i18n="no_sub">Нет подписки</span></div>
+                <div class="info-row">
+                    <span data-i18n="profile">Профиль:</span>
+                    <span class="info-value" id="username">User</span>
+                </div>
+                <div class="info-row">
+                    <span data-i18n="status">Статус:</span>
+                    <span class="info-value" data-i18n="no_sub">Нет подписки</span>
+                </div>
+                <div class="info-row" style="border-top: 1px solid rgba(188, 19, 254, 0.2); padding-top: 12px; margin-top: 12px;">
+                    <span data-i18n="sub_price">Цена подписки:</span>
+                    <span class="info-value">1 200 000 ₽</span>
+                </div>
             </div>
-        </div>
-
-        <div id="subs-screen" class="screen">
-            <div class="action-btn">🐣 Minimal — 150₽</div>
-            <div class="action-btn">🚀 Medium — 300₽</div>
-            <div class="action-btn">👑 Maximal — 500₽</div>
         </div>
 
         <div id="topup-screen" class="screen">
@@ -153,7 +152,7 @@
             </div>
 
             <div id="methods-list">
-                <div class="section-subtitle" data-i18n="pay_methods">Способы пополнения</div>
+                <div style="font-size: 16px; font-weight: bold; margin: 20px 0 15px 5px; color: #ccc;" data-i18n="pay_methods">Способы пополнения</div>
                 <div class="action-btn" onclick="showPayment('SBP')">📲 СБП</div>
                 <div class="action-btn" onclick="showPayment('Crypto')">🌐 Crypto (TON/USDT)</div>
                 <div class="action-btn" onclick="showPayment('Card')">💳 Карты РФ</div>
@@ -162,10 +161,8 @@
             <div id="payment-window" class="payment-details">
                 <h3 id="pay-title" style="margin-top:0"></h3>
                 <p style="font-size: 14px; color: #ccc;" data-i18n="pay_instr">Для оплаты перейдите по ссылке ниже:</p>
-                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 15px 0; word-break: break-all; color: var(--neon-purple); font-family: monospace;" id="pay-link">
-                    https://pay.provider.com/checkout/123
-                </div>
-                <div class="action-btn" onclick="backToMethods()" style="margin-bottom:0; font-size:12px; padding:12px;" data-i18n="btn_back_pay">⬅️ Назад к способам</div>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 15px 0; word-break: break-all; color: var(--neon-purple); font-family: monospace;" id="pay-link">---</div>
+                <div class="action-btn" onclick="backToMethods()" style="margin-bottom:0; font-size:12px; padding:12px;" data-i18n="btn_back_pay">⬅️ Назад</div>
             </div>
         </div>
 
@@ -179,10 +176,18 @@
     </div>
 
     <div class="navbar">
-        <div class="nav-item active" id="nav-home" onclick="navTo('main-screen', 'nav-home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span data-i18n="nav_home">Главная</span></div>
-        <div class="nav-item" id="nav-subs" onclick="navTo('subs-screen', 'nav-subs')"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg><span data-i18n="nav_subs">Подписка</span></div>
-        <div class="nav-item" id="nav-wallet" onclick="navTo('topup-screen', 'nav-wallet')"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span data-i18n="nav_wallet">Баланс</span></div>
-        <div class="nav-item" id="nav-ref" onclick="navTo('ref-screen', 'nav-ref')"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span data-i18n="nav_ref">Друзья</span></div>
+        <div class="nav-item active" id="nav-home" onclick="navTo('main-screen', 'nav-home')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span data-i18n="nav_home">Главная</span>
+        </div>
+        <div class="nav-item" id="nav-wallet" onclick="navTo('topup-screen', 'nav-wallet')">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            <span data-i18n="nav_wallet">Баланс</span>
+        </div>
+        <div class="nav-item" id="nav-ref" onclick="navTo('ref-screen', 'nav-ref')">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span data-i18n="nav_ref">Друзья</span>
+        </div>
     </div>
 
     <script>
@@ -192,17 +197,17 @@
         const i18n = {
             ru: {
                 welcome: "Добро пожаловать,", profile: "Профиль:", status: "Статус:", no_sub: "Нет подписки",
-                balance_label: "Текущий баланс", nav_home: "Главная", nav_subs: "Подписка", nav_wallet: "Баланс",
+                sub_price: "Цена подписки:", balance_label: "Текущий баланс", nav_home: "Главная", nav_wallet: "Баланс",
                 nav_ref: "Друзья", ref_text: "Приглашайте друзей и получайте бонусы!", btn_copy: "Копировать ссылку",
                 alert_copy: "Скопировано!", pay_methods: "Способы пополнения", pay_instr: "Для оплаты перейдите по ссылке ниже:",
-                btn_back_pay: "⬅️ Назад к способам"
+                btn_back_pay: "⬅️ Назад"
             },
             en: {
                 welcome: "Welcome,", profile: "Profile:", status: "Status:", no_sub: "No subscription",
-                balance_label: "Current balance", nav_home: "Home", nav_subs: "Subscription", nav_wallet: "Balance",
+                sub_price: "Subscription price:", balance_label: "Current balance", nav_home: "Home", nav_wallet: "Balance",
                 nav_ref: "Friends", ref_text: "Invite friends and get bonuses!", btn_copy: "Copy Link",
                 alert_copy: "Copied!", pay_methods: "Payment Methods", pay_instr: "Follow the link below to pay:",
-                btn_back_pay: "⬅️ Back to methods"
+                btn_back_pay: "⬅️ Back"
             }
         };
 
@@ -216,7 +221,6 @@
                 titleEl.style.fontSize = "26px";
             } else {
                 titleEl.style.fontSize = "22px";
-                if (screenId === 'subs-screen') titleEl.innerText = i18n[currentLang].nav_subs;
                 if (screenId === 'topup-screen') titleEl.innerText = i18n[currentLang].nav_wallet;
                 if (screenId === 'ref-screen') titleEl.innerText = i18n[currentLang].nav_ref;
             }
@@ -227,23 +231,20 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             document.getElementById(navId).classList.add('active');
-            backToMethods(); // Сбрасываем окно оплаты при переходе
+            backToMethods();
             updateTitle(screenId);
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Функции оплаты
         function showPayment(method) {
             document.getElementById('methods-list').style.display = 'none';
             const payWin = document.getElementById('payment-window');
             const title = document.getElementById('pay-title');
             const link = document.getElementById('pay-link');
-            
             payWin.style.display = 'block';
             if (method === 'SBP') { title.innerText = '📲 СБП'; link.innerText = 'https://qr.nspk.ru/test-pay-link'; }
             if (method === 'Crypto') { title.innerText = '🌐 Crypto'; link.innerText = 'ton://transfer/your-wallet-address'; }
             if (method === 'Card') { title.innerText = '💳 Карты РФ'; link.innerText = 'https://oplata.qiwi.com/form/example'; }
-            
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         }
 
