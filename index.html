@@ -10,8 +10,8 @@
             --bg-color: #0f0a1a;
             --card-bg: #1a1429;
             --neon-purple: #bc13fe;
-            --text-color: #ffffff; /* Вернул белый цвет */
-            --shadow: 0 0 15px rgba(188, 19, 254, 0.6);
+            --text-color: #ffffff;
+            --shadow: 0 0 12px rgba(188, 19, 254, 0.4);
         }
 
         * {
@@ -28,10 +28,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* Информационная панель */
+        /* Плашка пользователя без сильного неона текста */
         .user-card {
             background: var(--card-bg);
             width: 100%;
@@ -43,19 +42,20 @@
         }
 
         .user-info p {
-            margin: 8px 0;
+            margin: 10px 0;
             font-size: 14px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
+        /* Убрал text-shadow для чистоты */
         .user-info span {
             color: var(--neon-purple);
-            font-weight: bold;
-            text-shadow: 0 0 5px var(--neon-purple);
+            font-weight: 600;
         }
 
-        /* Кнопки */
+        /* Сетка кнопок */
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -66,37 +66,37 @@
         .btn {
             background: var(--card-bg);
             border: 2px solid var(--neon-purple);
-            color: var(--text-color); /* Текст снова белый */
+            color: var(--text-color);
             padding: 18px 5px;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             text-transform: uppercase;
             text-align: center;
             cursor: pointer;
             box-shadow: var(--shadow);
-            transition: transform 0.1s ease, background 0.2s ease;
+            transition: 0.2s;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            user-select: none;
+            gap: 5px;
         }
 
         .btn:active {
-            transform: scale(0.95);
-            background: rgba(188, 19, 254, 0.3);
+            transform: scale(0.96);
+            background: rgba(188, 19, 254, 0.15);
         }
 
         .full-width {
             grid-column: span 2;
-            margin-top: 5px;
         }
 
-        /* Экраны контента */
+        /* Экраны */
         .screen {
             display: none;
             width: 100%;
-            animation: fadeIn 0.2s ease-in-out;
+            animation: fadeIn 0.2s ease;
         }
 
         .screen.active {
@@ -114,26 +114,35 @@
             padding: 18px;
             border-radius: 12px;
             border-left: 4px solid var(--neon-purple);
-            position: relative;
-            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .copy-btn {
-            position: absolute;
-            top: 50%;
-            right: 15px;
-            transform: translateY(-50%);
-            background: var(--neon-purple);
-            color: white;
-            border: none;
+        /* Кнопка копирования как в коде */
+        .copy-icon-btn {
+            background: none;
+            border: 1px solid rgba(188, 19, 254, 0.5);
             border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: bold;
+            padding: 6px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
         }
 
-        h2 { text-align: center; margin-bottom: 20px; font-size: 20px; }
+        .copy-icon-btn:active {
+            background: var(--neon-purple);
+        }
+
+        .copy-icon-btn svg {
+            fill: white;
+            width: 18px;
+            height: 18px;
+        }
+
+        h2 { text-align: center; font-size: 18px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -141,74 +150,72 @@
     <div id="main-screen" class="screen active">
         <div class="user-card">
             <div class="user-info">
-                <p>Клиент: <span id="username">@user</span></p>
-                <p>Ваш баланс: <span id="balance">0.00 ₽</span></p>
-                <p>Подписка: <span id="sub-type">Не активна</span></p>
+                <p>👤 Профиль: <span id="username">@user</span></p>
+                <p>💳 Баланс: <span id="balance">0.00 ₽</span></p>
+                <p>🛡️ Статус: <span id="sub-type">Нет подписки</span></p>
             </div>
         </div>
 
         <div class="grid-container">
-            <div class="btn" onclick="showScreen('subs-screen')">Подписки</div>
-            <div class="btn" onclick="showScreen('topup-screen')">Пополнение</div>
-            <div class="btn full-width" onclick="showScreen('ref-screen')">Реферальная система</div>
+            <div class="btn" onclick="showScreen('subs-screen')">
+                <span>💎</span> Подписки
+            </div>
+            <div class="btn" onclick="showScreen('topup-screen')">
+                <span>💵</span> Пополнение
+            </div>
+            <div class="btn full-width" onclick="showScreen('ref-screen')">
+                <span>🔗</span> Реферальная система
+            </div>
         </div>
     </div>
 
     <div id="subs-screen" class="screen">
-        <h2>Выбор тарифа</h2>
-        <div class="option-item">Minimal — 150₽ / мес</div>
-        <div class="option-item">Medium — 300₽ / мес</div>
-        <div class="option-item">Maximal — 500₽ / мес</div>
-        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">Назад</div>
+        <h2>⚡ Выберите тариф</h2>
+        <div class="option-item">🐣 Minimal — 150₽</div>
+        <div class="option-item">🚀 Medium — 300₽</div>
+        <div class="option-item">👑 Maximal — 500₽</div>
+        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">⬅️ Назад</div>
     </div>
 
     <div id="topup-screen" class="screen">
-        <h2>Пополнение баланса</h2>
-        <div class="option-item">СБП</div>
-        <div class="option-item">Криптовалюта (USDT/TON)</div>
-        <div class="option-item">Карты РФ / МИР</div>
-        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">Назад</div>
+        <h2>💰 Пополнение</h2>
+        <div class="option-item">📲 СБП</div>
+        <div class="option-item">🌐 Crypto</div>
+        <div class="option-item">💳 Карты РФ</div>
+        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">⬅️ Назад</div>
     </div>
 
     <div id="ref-screen" class="screen">
-        <h2>Рефералы</h2>
+        <h2>🤝 Партнерам</h2>
         <div class="option-item">
-            <span id="ref-link" style="font-size: 12px; padding-right: 60px; display: block; overflow: hidden;">t.me/vpn_bot?start=ref</span>
-            <button class="copy-btn" onclick="copyLink()">COPY</button>
+            <span id="ref-link" style="font-size: 13px; color: #ccc;">t.me/bot?start=123</span>
+            <button class="copy-icon-btn" onclick="copyLink()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+                </svg>
+            </button>
         </div>
-        <p style="text-align: center; color: #888; font-size: 12px;">Получайте бонусы за каждого друга</p>
-        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">Назад</div>
+        <p style="text-align: center; color: #888; font-size: 12px; margin-top: 10px;">Копируйте ссылку и приглашайте друзей!</p>
+        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">⬅️ Назад</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready(); // Сообщаем TG, что приложение готово
+        tg.ready();
         tg.expand();
 
-        // Загрузка данных пользователя
         const user = tg.initDataUnsafe?.user;
         if (user) {
             document.getElementById('username').innerText = user.username ? `@${user.username}` : user.first_name;
-            document.getElementById('ref-link').innerText = `t.me/your_bot?start=${user.id}`;
+            document.getElementById('ref-link').innerText = `t.me/your_vpn_bot?start=${user.id}`;
         }
 
-        // Функция переключения экранов
         function showScreen(screenId) {
-            // 1. Скрываем все экраны
-            const screens = document.getElementsByClassName('screen');
-            for (let i = 0; i < screens.length; i++) {
-                screens[i].classList.remove('active');
-            }
-            // 2. Показываем нужный
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
-            
-            // Легкая вибрация
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Функция копирования
         function copyLink() {
             const linkText = document.getElementById('ref-link').innerText;
             const el = document.createElement('textarea');
@@ -218,7 +225,8 @@
             document.execCommand('copy');
             document.body.removeChild(el);
             
-            tg.showAlert("Ссылка скопирована!");
+            // Всплывающая подсказка от Телеграм
+            tg.showAlert("✅ Ссылка скопирована!");
         }
     </script>
 </body>
