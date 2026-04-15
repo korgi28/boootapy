@@ -42,27 +42,33 @@
 
         .logo { font-weight: bold; font-size: 22px; letter-spacing: 1px; }
 
-        /* Приветствие вне плашки */
-        .welcome-outside {
-            padding: 15px 20px 5px 20px;
-            font-size: 14px;
-            color: #b0b0b0;
+        /* Динамический заголовок под шапкой */
+        .page-title-area {
+            padding: 20px 20px 5px 20px;
+            min-height: 60px;
         }
 
-        .welcome-outside b { color: #fff; }
+        #dynamic-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0;
+        }
 
-        /* Языковая кнопка */
-        .lang-container { position: relative; width: 80px; }
+        /* Выбор языка */
+        .lang-container { position: relative; width: 95px; }
         .lang-current {
             background: var(--header-btn);
             border: 1px solid rgba(188, 19, 254, 0.5);
             color: white;
             padding: 8px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
         .lang-dropdown {
             display: none;
@@ -72,63 +78,71 @@
             border: 1px solid var(--neon-purple);
             border-radius: 8px;
             z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .lang-option { padding: 8px; font-size: 12px; text-align: center; cursor: pointer; border-bottom: 1px solid rgba(188, 19, 254, 0.2); }
+        .lang-option { padding: 10px; font-size: 13px; text-align: center; cursor: pointer; border-bottom: 1px solid rgba(188, 19, 254, 0.2); }
 
-        /* Контентная область с прокруткой */
+        /* Контент */
         .content {
             flex: 1;
             padding: 10px 20px;
             overflow-y: auto;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
 
-        .screen { display: none; animation: fadeIn 0.2s ease; }
+        .screen { display: none; animation: fadeIn 0.2s ease forwards; }
         .screen.active { display: block; }
 
-        /* Плашки информации */
         .glass-card {
             background: var(--card-bg);
             padding: 20px;
             border-radius: 15px;
             border: 1px solid var(--neon-purple);
             box-shadow: var(--shadow);
+            margin-bottom: 15px;
+        }
+
+        .balance-box {
+            background: #251a3d; 
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid var(--neon-purple);
             margin-bottom: 20px;
         }
 
-        .balance-card {
-            background: #251a3d; /* Отличается от фона */
-            text-align: center;
-            padding: 30px 20px;
-        }
-
-        .info-row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 14px; }
-        .info-label { color: #ccc; }
+        .info-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 15px; }
         .info-value { color: var(--neon-purple); font-weight: bold; }
 
-        /* Методы оплаты в балансе */
-        .payment-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .pay-item {
-            background: rgba(188, 19, 254, 0.1);
+        /* Кнопки списка */
+        .action-btn {
+            background: var(--card-bg);
             border: 1px solid var(--neon-purple);
-            padding: 15px;
-            border-radius: 10px;
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 10px;
             text-align: center;
             font-weight: bold;
+            cursor: pointer;
+            display: block;
+            width: 100%;
         }
 
-        /* Нижнее неоновое меню */
+        .action-btn:active { background: rgba(188, 19, 254, 0.2); }
+
+        /* Нижнее меню на 4 кнопки */
         .navbar {
             position: fixed;
             bottom: 20px;
-            left: 20px;
-            right: 20px;
+            left: 15px;
+            right: 15px;
             background: var(--card-bg);
             border: 2px solid var(--neon-purple);
             border-radius: 20px;
             display: flex;
             justify-content: space-around;
-            padding: 10px 5px;
+            padding: 12px 5px;
             box-shadow: var(--shadow);
             z-index: 1000;
         }
@@ -137,19 +151,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #888;
-            font-size: 10px;
+            color: #777;
+            font-size: 9px;
             text-transform: uppercase;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
             flex: 1;
         }
 
         .nav-item.active { color: var(--neon-purple); }
-        .nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; fill: currentColor; }
+        .nav-item svg { width: 20px; height: 20px; margin-bottom: 4px; fill: currentColor; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -157,57 +170,57 @@
     <div class="header">
         <div class="logo">🌌 Gravi</div>
         <div class="lang-container">
-            <div class="lang-current" id="lang-btn" onclick="toggleLangMenu()">RU</div>
+            <div class="lang-current" id="lang-btn" onclick="toggleLangMenu()">
+                <span>🇷🇺</span> <span>RU</span>
+            </div>
             <div class="lang-dropdown" id="lang-dropdown">
-                <div class="lang-option" onclick="setLanguage('ru')">🇷🇺 RU</div>
-                <div class="lang-option" onclick="setLanguage('en')">🇺🇸 EN</div>
+                <div class="lang-option" onclick="setLanguage('ru', '🇷🇺')">🇷🇺 RU</div>
+                <div class="lang-option" onclick="setLanguage('en', '🇺🇸')">🇺🇸 EN</div>
             </div>
         </div>
     </div>
 
-    <div class="welcome-outside">
-        <span data-i18n="welcome">Добро пожаловать</span>, <b id="header-user">Гость</b>
+    <div class="page-title-area">
+        <p id="dynamic-title"></p>
     </div>
 
     <div class="content">
         <div id="main-screen" class="screen active">
             <div class="glass-card">
                 <div class="info-row">
-                    <span class="info-label" data-i18n="profile">👤 Профиль:</span>
+                    <span data-i18n="profile">Профиль:</span>
                     <span class="info-value" id="username">User</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label" data-i18n="status">🛡️ Статус:</span>
+                    <span data-i18n="status">Статус:</span>
                     <span class="info-value" data-i18n="no_sub">Нет подписки</span>
-                </div>
-            </div>
-            <div class="glass-card">
-                <p style="font-size: 13px; text-align: center;" data-i18n="ref_text">Ваша реферальная ссылка:</p>
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <code id="ref-link" style="color: var(--neon-purple); font-size: 11px;">t.me/bot?start=1</code>
-                    <button onclick="copyLink()" style="background: none; border: 1px solid var(--neon-purple); color: #fff; border-radius: 5px; padding: 4px 8px; font-size: 10px;">COPY</button>
                 </div>
             </div>
         </div>
 
         <div id="subs-screen" class="screen">
-            <h2 style="text-align: center;" data-i18n="btn_subs">Подписки</h2>
-            <div class="glass-card">
-                <div class="info-row"><span>🐣 Minimal</span> <span>150₽</span></div>
-                <div class="info-row"><span>🚀 Medium</span> <span>300₽</span></div>
-                <div class="info-row"><span>👑 Maximal</span> <span>500₽</span></div>
-            </div>
+            <div class="action-btn">🐣 Minimal — 150₽</div>
+            <div class="action-btn">🚀 Medium — 300₽</div>
+            <div class="action-btn">👑 Maximal — 500₽</div>
         </div>
 
         <div id="topup-screen" class="screen">
-            <div class="glass-card balance-card">
-                <span style="font-size: 12px; opacity: 0.7;" data-i18n="balance_label">Текущий баланс</span>
+            <div class="balance-box">
+                <span style="font-size: 13px; opacity: 0.7;" data-i18n="balance_label">Текущий баланс</span>
                 <div style="font-size: 32px; font-weight: bold; margin: 10px 0;">0.00 ₽</div>
             </div>
-            <div class="payment-list">
-                <div class="pay-item">📲 СБП</div>
-                <div class="pay-item">🌐 Crypto (TON/USDT)</div>
-                <div class="pay-item">💳 Карты РФ</div>
+            <div class="action-btn">📲 СБП</div>
+            <div class="action-btn">🌐 Crypto (TON/USDT)</div>
+            <div class="action-btn">💳 Карты РФ</div>
+        </div>
+
+        <div id="ref-screen" class="screen">
+            <div class="glass-card" style="text-align: center;">
+                <p style="font-size: 14px; margin-bottom: 20px;" data-i18n="ref_text">Приглашайте друзей и получайте бонусы!</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border: 1px dashed var(--neon-purple); word-break: break-all; font-family: monospace; font-size: 12px; margin-bottom: 15px;" id="ref-link">
+                    t.me/bot?start=12345
+                </div>
+                <button class="action-btn" onclick="copyLink()" style="margin-bottom: 0;" data-i18n="btn_copy">Копировать ссылку</button>
             </div>
         </div>
     </div>
@@ -219,11 +232,15 @@
         </div>
         <div class="nav-item" id="nav-subs" onclick="navTo('subs-screen', 'nav-subs')">
             <svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
-            <span data-i18n="btn_subs">Подписка</span>
+            <span data-i18n="nav_subs">Подписка</span>
         </div>
         <div class="nav-item" id="nav-wallet" onclick="navTo('topup-screen', 'nav-wallet')">
             <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
             <span data-i18n="nav_wallet">Баланс</span>
+        </div>
+        <div class="nav-item" id="nav-ref" onclick="navTo('ref-screen', 'nav-ref')">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span data-i18n="nav_ref">Друзья</span>
         </div>
     </div>
 
@@ -234,36 +251,57 @@
 
         const i18n = {
             ru: {
-                welcome: "Добро пожаловать",
+                welcome: "Добро пожаловать,",
                 profile: "Профиль:",
                 status: "Статус:",
                 no_sub: "Нет подписки",
-                btn_subs: "Подписка",
                 balance_label: "Текущий баланс",
                 nav_home: "Главная",
+                nav_subs: "Подписка",
                 nav_wallet: "Баланс",
-                ref_text: "Ваша реферальная ссылка:",
-                alert_copy: "Ссылка скопирована!"
+                nav_ref: "Друзья",
+                ref_text: "Приглашайте друзей и получайте бонусы!",
+                btn_copy: "Копировать ссылку",
+                alert_copy: "Скопировано!"
             },
             en: {
-                welcome: "Welcome",
+                welcome: "Welcome,",
                 profile: "Profile:",
                 status: "Status:",
                 no_sub: "No subscription",
-                btn_subs: "Subscription",
                 balance_label: "Current balance",
                 nav_home: "Home",
-                nav_wallet: "Wallet",
-                ref_text: "Your referral link:",
-                alert_copy: "Link copied!"
+                nav_subs: "Subscription",
+                nav_wallet: "Balance",
+                nav_ref: "Friends",
+                ref_text: "Invite friends and get bonuses!",
+                btn_copy: "Copy Link",
+                alert_copy: "Copied!"
             }
         };
+
+        let currentLang = 'ru';
+        let userName = "Гость";
+
+        function updateTitle(screenId) {
+            const titleEl = document.getElementById('dynamic-title');
+            if (screenId === 'main-screen') {
+                titleEl.innerHTML = `${i18n[currentLang].welcome} <br><b>${userName}</b>`;
+                titleEl.style.fontSize = "26px";
+            } else {
+                titleEl.style.fontSize = "22px";
+                if (screenId === 'subs-screen') titleEl.innerText = i18n[currentLang].nav_subs;
+                if (screenId === 'topup-screen') titleEl.innerText = i18n[currentLang].nav_wallet;
+                if (screenId === 'ref-screen') titleEl.innerText = i18n[currentLang].nav_ref;
+            }
+        }
 
         function navTo(screenId, navId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             document.getElementById(navId).classList.add('active');
+            updateTitle(screenId);
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
@@ -272,27 +310,39 @@
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        function setLanguage(lang) {
-            document.getElementById('lang-btn').innerText = lang.toUpperCase();
+        function setLanguage(lang, flag) {
+            currentLang = lang;
+            document.getElementById('lang-btn').innerHTML = `<span>${flag}</span> <span>${lang.toUpperCase()}</span>`;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 el.innerText = i18n[lang][key];
             });
+            // Обновить заголовок текущего экрана после смены языка
+            const activeScreen = document.querySelector('.screen.active').id;
+            updateTitle(activeScreen);
             document.getElementById('lang-dropdown').style.display = 'none';
         }
 
         const user = tg.initDataUnsafe?.user;
         if (user) {
-            const name = user.username || user.first_name;
-            document.getElementById('username').innerText = name;
-            document.getElementById('header-user').innerText = name;
-            document.getElementById('ref-link').innerText = `t.me/bot?start=${user.id}`;
+            userName = user.first_name;
+            document.getElementById('username').innerText = user.username || user.first_name;
+            document.getElementById('ref-link').innerText = `t.me/your_bot?start=${user.id}`;
         }
+        
+        // Инициализация заголовка
+        updateTitle('main-screen');
 
         function copyLink() {
             const linkText = document.getElementById('ref-link').innerText;
             navigator.clipboard.writeText(linkText);
-            tg.showAlert("✅");
+            tg.showAlert(i18n[currentLang].alert_copy);
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.lang-container')) {
+                document.getElementById('lang-dropdown').style.display = 'none';
+            }
         }
     </script>
 </body>
