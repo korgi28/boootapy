@@ -10,14 +10,15 @@
             --bg-color: #0f0a1a;
             --card-bg: #1a1429;
             --neon-purple: #bc13fe;
-            --text-color: #ffffff;
-            --shadow: 0 0 10px rgba(188, 19, 254, 0.5);
+            --text-main: #ffffff;
+            --text-button: #b0b0b0; /* Более темный текст для кнопок */
+            --shadow: 0 0 10px rgba(188, 19, 254, 0.4);
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -61,14 +62,15 @@
         .btn {
             background: var(--card-bg);
             border: 2px solid var(--neon-purple);
-            color: white;
+            color: var(--text-button); /* Темный текст */
             padding: 20px 10px;
             border-radius: 12px;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -76,20 +78,18 @@
         }
 
         .btn:active {
-            transform: scale(0.95);
-            background: var(--neon-purple);
+            transform: scale(0.96);
+            background: rgba(188, 19, 254, 0.2);
         }
 
-        /* Длинная кнопка снизу */
         .full-width {
             grid-column: span 2;
         }
 
-        /* Экраны контента (скрыты по умолчанию) */
+        /* Экраны */
         .screen {
             display: none;
             width: 100%;
-            text-align: center;
             animation: fadeIn 0.3s ease;
         }
 
@@ -97,29 +97,38 @@
             display: block;
         }
 
-        .back-btn {
-            margin-top: 20px;
-            color: var(--neon-purple);
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .option-list {
-            list-style: none;
-            padding: 0;
-        }
-
         .option-item {
-            background: rgba(188, 19, 254, 0.1);
+            background: rgba(188, 19, 254, 0.05);
             margin: 10px 0;
             padding: 15px;
             border-radius: 10px;
-            border-left: 4px solid var(--neon-purple);
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            position: relative;
+        }
+
+        /* Кнопка копирования */
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--neon-purple);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-container {
+            margin-top: 30px;
+            width: 100%;
         }
     </style>
 </head>
@@ -128,84 +137,43 @@
     <div id="main-screen" class="screen active">
         <div class="user-card">
             <div class="user-info">
-                <p>Пользователь: <span id="username">Загрузка...</span></p>
-                <p>Баланс: <span id="balance">0.00 ₽</span></p>
-                <p>Подписка: <span id="sub-type">Нет</span></p>
+                <p>👤 ID: <span id="username">Loading...</span></p>
+                <p>💰 Баланс: <span id="balance">0.00 ₽</span></p>
+                <p>💎 Тариф: <span id="sub-type">Не активен</span></p>
             </div>
         </div>
 
         <div class="grid-container">
-            <div class="btn" onclick="showScreen('subs-screen')">ПОДПИСКИ</div>
-            <div class="btn" onclick="showScreen('topup-screen')">ПОПОЛНЕНИЕ</div>
-            <div class="btn full-width" onclick="showScreen('ref-screen')">РЕФЕРАЛЬНАЯ СИСТЕМА</div>
+            <div class="btn" onclick="showScreen('subs-screen')">Подписки</div>
+            <div class="btn" onclick="showScreen('topup-screen')">Пополнение</div>
+            <div class="btn full-width" onclick="showScreen('ref-screen')">Реферальная система</div>
         </div>
     </div>
 
     <div id="subs-screen" class="screen">
-        <h3>Выберите тариф</h3>
-        <div class="option-list">
-            <div class="option-item">MINIMAL — 150₽/мес</div>
-            <div class="option-item">MEDIUM — 300₽/мес</div>
-            <div class="option-item">MAXIMAL — 500₽/мес</div>
+        <h3 style="text-align:center">Доступные тарифы</h3>
+        <div class="option-item">MINIMAL — 150₽</div>
+        <div class="option-item">MEDIUM — 300₽</div>
+        <div class="option-item">MAXIMAL — 500₽</div>
+        
+        <div class="back-container">
+            <div class="btn full-width" onclick="showScreen('main-screen')">Назад в меню</div>
         </div>
-        <div class="back-btn" onclick="showScreen('main-screen')">← Назад</div>
     </div>
 
     <div id="topup-screen" class="screen">
-        <h3>Метод оплаты</h3>
-        <div class="option-list">
-            <div class="option-item">СБП (Система быстрых платежей)</div>
-            <div class="option-item">Криптовалюта (USDT/TON)</div>
-            <div class="option-item">Карты РФ</div>
+        <h3 style="text-align:center">Метод оплаты</h3>
+        <div class="option-item">СБП</div>
+        <div class="option-item">Криптовалюта</div>
+        <div class="option-item">Карты РФ</div>
+
+        <div class="back-container">
+            <div class="btn full-width" onclick="showScreen('main-screen')">Назад в меню</div>
         </div>
-        <div class="back-btn" onclick="showScreen('main-screen')">← Назад</div>
     </div>
 
     <div id="ref-screen" class="screen">
-        <h3>Ваша ссылка</h3>
-        <div class="option-item" style="word-break: break-all;">
-            t.me/your_vpn_bot?start=ref_<span id="user-id">12345</span>
-        </div>
-        <p style="font-size: 12px; color: #888;">Пригласите друга и получите 10% от его пополнений!</p>
-        <div class="back-btn" onclick="showScreen('main-screen')">← Назад</div>
-    </div>
-
-    <script>
-        // Инициализация Telegram Web App
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Расширить на весь экран
-
-        // Настройка цветов темы (опционально для интеграции)
-        tg.setHeaderColor('#0f0a1a');
-
-        // Получение данных пользователя из Telegram
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('username').innerText = user.username || user.first_name;
-            document.getElementById('user-id').innerText = user.id;
-        } else {
-            document.getElementById('username').innerText = "Гость";
-        }
-
-        // Функция переключения экранов
-        function showScreen(screenId) {
-            // Скрываем все экраны
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            // Показываем нужный
-            document.getElementById(screenId).classList.add('active');
-            
-            // Если экран не главный, показываем кнопку "Назад" в самом Telegram
-            if (screenId !== 'main-screen') {
-                tg.BackButton.show();
-            } else {
-                tg.BackButton.hide();
-            }
-        }
-
-        // Обработка системной кнопки "Назад" в Telegram
-        tg.BackButton.onClick(() => {
-            showScreen('main-screen');
-        });
-    </script>
-</body>
-</html>
+        <h3 style="text-align:center">Партнерская программа</h3>
+        <div class="option-item">
+            <button class="copy-btn" onclick="copyLink()">COPY</button>
+            <span id="ref-link" style="font-size: 12px; color: var
