@@ -2,45 +2,48 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPN Store Mini App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VPN Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg-color: #0f0a1a;
             --card-bg: #1a1429;
             --neon-purple: #bc13fe;
-            --text-main: #ffffff;
-            --text-button: #b0b0b0; /* Более темный текст для кнопок */
-            --shadow: 0 0 10px rgba(188, 19, 254, 0.4);
+            --text-color: #ffffff; /* Вернул белый цвет */
+            --shadow: 0 0 15px rgba(188, 19, 254, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', sans-serif;
+            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Плашка пользователя */
+        /* Информационная панель */
         .user-card {
             background: var(--card-bg);
             width: 100%;
-            padding: 15px;
+            padding: 20px;
             border-radius: 15px;
             border: 1px solid var(--neon-purple);
             box-shadow: var(--shadow);
             margin-bottom: 25px;
-            box-sizing: border-box;
         }
 
         .user-info p {
-            margin: 5px 0;
+            margin: 8px 0;
             font-size: 14px;
             display: flex;
             justify-content: space-between;
@@ -49,48 +52,51 @@
         .user-info span {
             color: var(--neon-purple);
             font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-purple);
         }
 
-        /* Сетка кнопок */
+        /* Кнопки */
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             width: 100%;
         }
 
         .btn {
             background: var(--card-bg);
             border: 2px solid var(--neon-purple);
-            color: var(--text-button); /* Темный текст */
-            padding: 20px 10px;
+            color: var(--text-color); /* Текст снова белый */
+            padding: 18px 5px;
             border-radius: 12px;
-            font-size: 13px;
-            font-weight: 800;
+            font-size: 14px;
+            font-weight: bold;
             text-transform: uppercase;
             text-align: center;
             cursor: pointer;
-            transition: 0.2s;
+            box-shadow: var(--shadow);
+            transition: transform 0.1s ease, background 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: var(--shadow);
+            user-select: none;
         }
 
         .btn:active {
-            transform: scale(0.96);
-            background: rgba(188, 19, 254, 0.2);
+            transform: scale(0.95);
+            background: rgba(188, 19, 254, 0.3);
         }
 
         .full-width {
             grid-column: span 2;
+            margin-top: 5px;
         }
 
-        /* Экраны */
+        /* Экраны контента */
         .screen {
             display: none;
             width: 100%;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.2s ease-in-out;
         }
 
         .screen.active {
@@ -98,38 +104,36 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .option-item {
-            background: rgba(188, 19, 254, 0.05);
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(188, 19, 254, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            margin: 12px 0;
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid var(--neon-purple);
             position: relative;
+            font-size: 15px;
         }
 
-        /* Кнопка копирования */
         .copy-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
             background: var(--neon-purple);
             color: white;
             border: none;
-            border-radius: 5px;
-            padding: 5px 8px;
-            font-size: 10px;
-            cursor: pointer;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 11px;
             font-weight: bold;
+            cursor: pointer;
         }
 
-        .back-container {
-            margin-top: 30px;
-            width: 100%;
-        }
+        h2 { text-align: center; margin-bottom: 20px; font-size: 20px; }
     </style>
 </head>
 <body>
@@ -137,9 +141,9 @@
     <div id="main-screen" class="screen active">
         <div class="user-card">
             <div class="user-info">
-                <p>👤 ID: <span id="username">Loading...</span></p>
-                <p>💰 Баланс: <span id="balance">0.00 ₽</span></p>
-                <p>💎 Тариф: <span id="sub-type">Не активен</span></p>
+                <p>Клиент: <span id="username">@user</span></p>
+                <p>Ваш баланс: <span id="balance">0.00 ₽</span></p>
+                <p>Подписка: <span id="sub-type">Не активна</span></p>
             </div>
         </div>
 
@@ -151,64 +155,70 @@
     </div>
 
     <div id="subs-screen" class="screen">
-        <h3 style="text-align:center">Доступные тарифы</h3>
-        <div class="option-item">MINIMAL — 150₽</div>
-        <div class="option-item">MEDIUM — 300₽</div>
-        <div class="option-item">MAXIMAL — 500₽</div>
-        
-        <div class="back-container">
-            <div class="btn full-width" onclick="showScreen('main-screen')">Назад в меню</div>
-        </div>
+        <h2>Выбор тарифа</h2>
+        <div class="option-item">Minimal — 150₽ / мес</div>
+        <div class="option-item">Medium — 300₽ / мес</div>
+        <div class="option-item">Maximal — 500₽ / мес</div>
+        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">Назад</div>
     </div>
 
     <div id="topup-screen" class="screen">
-        <h3 style="text-align:center">Метод оплаты</h3>
+        <h2>Пополнение баланса</h2>
         <div class="option-item">СБП</div>
-        <div class="option-item">Криптовалюта</div>
-        <div class="option-item">Карты РФ</div>
-
-        <div class="back-container">
-            <div class="btn full-width" onclick="showScreen('main-screen')">Назад в меню</div>
-        </div>
+        <div class="option-item">Криптовалюта (USDT/TON)</div>
+        <div class="option-item">Карты РФ / МИР</div>
+        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">Назад</div>
     </div>
 
     <div id="ref-screen" class="screen">
-        <h3 style="text-align:center">Партнерская программа</h3>
+        <h2>Рефералы</h2>
         <div class="option-item">
+            <span id="ref-link" style="font-size: 12px; padding-right: 60px; display: block; overflow: hidden;">t.me/vpn_bot?start=ref</span>
             <button class="copy-btn" onclick="copyLink()">COPY</button>
-            <span id="ref-link" style="font-size: 12px; color: var(--text-button);">t.me/vpn_bot?start=12345678</span>
         </div>
-        <p style="font-size: 12px; text-align: center; color: #666;">Нажмите на кнопку COPY, чтобы скопировать ссылку</p>
-
-        <div class="back-container">
-            <div class="btn full-width" onclick="showScreen('main-screen')">Назад в меню</div>
-        </div>
+        <p style="text-align: center; color: #888; font-size: 12px;">Получайте бонусы за каждого друга</p>
+        <div class="btn full-width" onclick="showScreen('main-screen')" style="margin-top: 20px;">Назад</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
+        tg.ready(); // Сообщаем TG, что приложение готово
         tg.expand();
 
-        // Данные пользователя
+        // Загрузка данных пользователя
         const user = tg.initDataUnsafe?.user;
         if (user) {
-            document.getElementById('username').innerText = user.username || user.first_name;
+            document.getElementById('username').innerText = user.username ? `@${user.username}` : user.first_name;
             document.getElementById('ref-link').innerText = `t.me/your_bot?start=${user.id}`;
         }
 
+        // Функция переключения экранов
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // 1. Скрываем все экраны
+            const screens = document.getElementsByClassName('screen');
+            for (let i = 0; i < screens.length; i++) {
+                screens[i].classList.remove('active');
+            }
+            // 2. Показываем нужный
             document.getElementById(screenId).classList.add('active');
             
-            // Вибрация при переключении (тактильный отклик)
-            tg.HapticFeedback.impactOccurred('light');
+            // Легкая вибрация
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
         }
 
+        // Функция копирования
         function copyLink() {
             const linkText = document.getElementById('ref-link').innerText;
-            navigator.clipboard.writeText(linkText).then(() => {
-                tg.showAlert("Ссылка скопирована!");
-            });
+            const el = document.createElement('textarea');
+            el.value = linkText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            tg.showAlert("Ссылка скопирована!");
         }
     </script>
 </body>
