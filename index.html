@@ -11,6 +11,7 @@
             --header-bg: #1d1433; 
             --header-btn: #2b1f47; 
             --card-bg: #1a1429;
+            --inner-card-bg: #140e24; /* На пару тонов темнее основного */
             --neon-purple: #bc13fe;
             --text-color: #ffffff;
             --shadow: 0 0 12px rgba(188, 19, 254, 0.4);
@@ -80,6 +81,15 @@
             border-radius: 15px; border: 1px solid var(--neon-purple); margin-bottom: 15px;
         }
 
+        /* ОТДЕЛЬНАЯ ПЛАШКА ДЛЯ СПОСОБОВ */
+        .methods-container {
+            background: var(--inner-card-bg);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            margin-top: 10px;
+        }
+
         .info-row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 15px; }
         .info-value { color: var(--neon-purple); font-weight: bold; }
 
@@ -88,6 +98,7 @@
             color: #fff; padding: 18px; border-radius: 12px; margin-bottom: 10px;
             text-align: center; font-weight: bold; cursor: pointer; display: block; width: 100%;
         }
+        .action-btn:last-child { margin-bottom: 0; }
         .action-btn:active { background: rgba(188, 19, 254, 0.2); }
 
         /* Окно оплаты */
@@ -150,8 +161,8 @@
                 <div style="font-size: 32px; font-weight: bold; margin: 10px 0;">0.00 ₽</div>
             </div>
 
-            <div id="methods-list">
-                <div style="font-size: 16px; font-weight: bold; margin: 20px 0 15px 5px; color: #ccc;" data-i18n="pay_methods">Способы пополнения</div>
+            <div id="methods-list" class="methods-container">
+                <div style="font-size: 15px; font-weight: bold; margin-bottom: 15px; color: #eee; text-align: center;" data-i18n="pay_methods">Способы пополнения</div>
                 <div class="action-btn" onclick="showPayment('SBP')">📲 СБП</div>
                 <div class="action-btn" onclick="showPayment('Crypto')">🌐 Crypto (TON/USDT)</div>
                 <div class="action-btn" onclick="showPayment('Card')">💳 Карты РФ</div>
